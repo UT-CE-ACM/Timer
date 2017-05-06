@@ -1,13 +1,14 @@
 $(function(){
 
-	baseStamp = 99995400100
-	lastTime = Date.now()
-	reminderStamp = 0
-	diff = 0
+	var baseStamp = 99995400100
+	var lastTime = Date.now()
+	var reminderStamp = 0
+	var diff = 0
+	var lastRed = 5 * 60 * 1000
 
 	// check reminder!
-	lastTimeSet = 0
-	lastTimePlus = 0
+	var lastTimeSet = 0
+	var lastTimePlus = 0
 
 	$.post( "./getData", function( data ) {
 		lastTimeSet = data.reminderStamp.length-1;
@@ -30,7 +31,7 @@ $(function(){
 			}
 
 		});
- 	}, 2000);
+ 	}, 1000);
 
 	// Cache some selectors
 	var clock = $('#clock'),
@@ -120,6 +121,12 @@ $(function(){
 		digits.m2.attr('class', digit_to_name[now[3]]);
 		digits.s1.attr('class', digit_to_name[now[4]]);
 		digits.s2.attr('class', digit_to_name[now[5]]);
+
+		if( reminderStamp < lastRed ) {
+			$('.digits').addClass("red");
+		} else {
+			$('.digits').removeClass("red");
+		}
 
 		// The library returns Sunday as the first day of the week.
 		// Stupid, I know. Lets shift all the days one position down,

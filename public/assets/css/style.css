@@ -15,7 +15,7 @@
 
 
 html{
-	background:url('../img/bg.jpg') #dbe4e6;
+	background: #0f1620;
 	overflow:hidden;
 }
 
@@ -38,15 +38,14 @@ section, footer, header, aside{
 	display: block;
 }
 
-
 /*-------------------------
 	The clocks
 --------------------------*/
 
 
 #clock{
-	width:370px;
-	padding:40px;
+	/*width:370px;
+	padding:40px;*/
 	margin:200px auto 60px;
 	position:relative;
 }
@@ -113,17 +112,22 @@ section, footer, header, aside{
 
 
 #clock.dark{
-	background-color:#272e38;
+	/*background-color:#272e38;*/
 	color:#cacaca;
 }
 
 #clock.dark:after{
-	box-shadow:0 4px 10px rgba(0,0,0,0.3);
+	/*box-shadow:0 4px 10px rgba(0,0,0,0.3);*/
 }
 
 #clock.dark .digits div span{
 	background-color:#cacaca;
 	border-color:#cacaca;
+}
+
+.red div span {
+	background-color: red !important;
+	border-color: red !important;
 }
 
 #clock.dark .alarm{
@@ -132,7 +136,7 @@ section, footer, header, aside{
 
 #clock.dark .display{
 	background-color:#0f1620;
-	box-shadow:0 1px 1px rgba(0,0,0,0.08) inset, 0 1px 1px #2d3642;
+	/*box-shadow:0 1px 1px rgba(0,0,0,0.08) inset, 0 1px 1px #2d3642;*/
 }
 
 #clock.dark .digits div.dots:before,

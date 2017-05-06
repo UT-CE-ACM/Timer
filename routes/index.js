@@ -19,14 +19,14 @@ router.get('/settings', function(req, res, next) {
 /* setTime */
 router.post('/setTimer', function(req, res, next) {
   console.log(`set timer to ${parseInt(req.body.time)}`);
-  data.reminderStamp.push( parseInt(req.body.time) )
+  data.reminderStamp.push( parseInt(req.body.timeH) * 3600 * 1000 + parseInt(req.body.timeM) * 60 * 1000 + parseInt(req.body.timeS) * 1000 )
   res.render('settings', { title: 'Express' });
 });
 
 /* addTime */
 router.post('/addTime', function(req, res, next) {
   console.log(`${parseInt(req.body.time)} added!`);
-  data.timePlus.push( parseInt(req.body.time) )
+  data.timePlus.push( parseInt(req.body.timeH) * 3600 * 1000 + parseInt(req.body.timeM) * 60 * 1000 + parseInt(req.body.timeS) * 1000 )
   res.render('settings', { title: 'Express' });
 });
 
