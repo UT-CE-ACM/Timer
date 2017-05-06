@@ -1,5 +1,10 @@
 $(function(){
 
+	baseStamp = 99995400100
+	lastTime = Date.now()
+	reminderStamp = 10000
+	diff = 0
+
 	// Cache some selectors
 
 	var clock = $('#clock'),
@@ -54,41 +59,49 @@ $(function(){
 
 	// Add the weekday names
 
-	var weekday_names = 'MON TUE WED THU FRI SAT SUN'.split(' '),
-		weekday_holder = clock.find('.weekdays');
-
-	$.each(weekday_names, function(){
-		weekday_holder.append('<span>' + this + '</span>');
-	});
+	// var weekday_names = 'MON TUE WED THU FRI SAT SUN'.split(' '),
+	// 	weekday_holder = clock.find('.weekdays');
+	//
+	// $.each(weekday_names, function(){
+	// 	weekday_holder.append('<span>' + this + '</span>');
+	// });
 
 	var weekdays = clock.find('.weekdays span');
 
 
 	// Run a timer every second and update the clock
-
-	(function update_time(){
+	ll = Date.now()
+	function update_time(){
 
 		// Use moment.js to output the current time as a string
 		// hh is for the hours in 12-hour format,
 		// mm - minutes, ss-seconds (all with leading zeroes),
 		// d is for day of week and A is for AM/PM
+		ll = Date.now() - ll;
+		reminderStamp -= ll
+		reminderStamp = (reminderStamp < 0)? 0 : reminderStamp;
+		var now = moment( baseStamp + reminderStamp ).format("hhmmssdA");
+		diff = Date.now() - lastTime
+		ll = Date.now()
 
-		var now = moment().format("hhmmssdA");
+		// // dirty force 12 -> 00
+		myH0 = (now[0] == 1 && now[1] == 2)? 0 : now[0]
+		myH1 = (now[0] == 1 && now[1] == 2)? 0 : now[1]
 
-		digits.h1.attr('class', digit_to_name[now[0]]);
-		digits.h2.attr('class', digit_to_name[now[1]]);
+		digits.h1.attr('class', digit_to_name[myH0]);
+		digits.h2.attr('class', digit_to_name[myH1]);
 		digits.m1.attr('class', digit_to_name[now[2]]);
 		digits.m2.attr('class', digit_to_name[now[3]]);
 		digits.s1.attr('class', digit_to_name[now[4]]);
 		digits.s2.attr('class', digit_to_name[now[5]]);
 
 		// The library returns Sunday as the first day of the week.
-		// Stupid, I know. Lets shift all the days one position down, 
+		// Stupid, I know. Lets shift all the days one position down,
 		// and make Sunday last
 
 		var dow = now[6];
 		dow--;
-		
+
 		// Sunday!
 		if(dow < 0){
 			// Make it last
@@ -105,7 +118,7 @@ $(function(){
 		// Is there an alarm set?
 
 		if(alarm_counter > 0){
-			
+
 			// Decrement the counter with one second
 			alarm_counter--;
 
@@ -123,7 +136,7 @@ $(function(){
 				$('#alarm-ring')[0].play();
 			}
 			catch(e){}
-			
+
 			alarm_counter--;
 			alarm.removeClass('active');
 		}
@@ -131,14 +144,13 @@ $(function(){
 			// The alarm has been cleared
 			alarm.removeClass('active');
 		}
-
 		// Schedule this function to be run again in 1 sec
-		setTimeout(update_time, 1000);
+		setTimeout(update_time, 100);
 
-	})();
+	};
+	update_time()
 
 	// Switch the theme
-
 	$('#switch-theme').click(function(){
 		clock.toggleClass('light dark');
 	});
@@ -147,7 +159,7 @@ $(function(){
 	// Handle setting and clearing alamrs
 
 	$('.alarm-button').click(function(){
-		
+
 		// Show the dialog
 		dialog.trigger('show');
 
@@ -159,7 +171,7 @@ $(function(){
 
 	dialog.click(function(e){
 
-		// When the overlay is clicked, 
+		// When the overlay is clicked,
 		// hide the dialog.
 
 		if($(e.target).is('.overlay')){
@@ -200,7 +212,7 @@ $(function(){
 
 		if(after < 1){
 			alert('Please choose a time in the future!');
-			return;	
+			return;
 		}
 
 		alarm_counter = after;
@@ -225,7 +237,7 @@ $(function(){
 		var hours = 0, minutes = 0, seconds = 0, tmp = 0;
 
 		if(alarm_counter > 0){
-			
+
 			// There is an alarm set, calculate the remaining time
 
 			tmp = alarm_counter;
