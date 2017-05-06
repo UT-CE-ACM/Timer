@@ -2,11 +2,37 @@ $(function(){
 
 	baseStamp = 99995400100
 	lastTime = Date.now()
-	reminderStamp = 10000
+	reminderStamp = 0
 	diff = 0
 
-	// Cache some selectors
+	// check reminder!
+	lastTimeSet = 0
+	lastTimePlus = 0
 
+	$.post( "./getData", function( data ) {
+		lastTimeSet = data.reminderStamp.length-1;
+		lastTimePlus = data.timePlus.length-1;
+		reminderStamp = data.reminderStamp[lastTimeSet]
+	});
+
+	setInterval( () => {
+		$.post( "./getData", function( data ) {
+			console.log(data);
+
+			while(lastTimePlus < data.timePlus.length-1) {
+				lastTimePlus++;
+				reminderStamp += data.timePlus[lastTimePlus];
+			}
+
+			if( lastTimeSet != data.reminderStamp.length-1 ) {
+				lastTimeSet = data.reminderStamp.length-1;
+				reminderStamp = data.reminderStamp[lastTimeSet];
+			}
+
+		});
+ 	}, 2000);
+
+	// Cache some selectors
 	var clock = $('#clock'),
 		alarm = clock.find('.alarm'),
 		ampm = clock.find('.ampm'),
